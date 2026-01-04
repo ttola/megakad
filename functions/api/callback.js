@@ -56,12 +56,16 @@ export async function onRequest(context) {
       const status = document.getElementById('status');
 
       if (window.opener) {
-        status.textContent = 'Sending token to Decap CMS...';
-        window.opener.postMessage(message, '*');
-        status.textContent = 'Token sent! Closing...';
-        setTimeout(function() { window.close(); }, 250);
+        status.textContent = 'window.opener EXISTS - Sending token...';
+        try {
+          window.opener.postMessage(message, '*');
+          status.textContent = 'SUCCESS: Token sent! Message: ' + message.substring(0, 60) + '...';
+        } catch(e) {
+          status.textContent = 'ERROR: postMessage failed: ' + e.message;
+        }
+        // NOT auto-closing for debugging
       } else {
-        status.textContent = 'window.opener is null - cannot send token back. Token received: ' + token.substring(0, 10) + '...';
+        status.textContent = 'FAIL: window.opener is NULL. Token: ' + token.substring(0, 10) + '...';
       }
     })();
   </script>

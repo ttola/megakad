@@ -51,29 +51,32 @@ export async function onRequest(context) {
     (function() {
       const token = ${JSON.stringify(tokenData.access_token)};
       const provider = 'github';
+      const message = 'authorization:' + provider + ':success:' + JSON.stringify({ token: token, provider: provider });
 
       function sendMessage() {
+        const status = document.getElementById('status');
+
         if (window.opener) {
-          window.opener.postMessage(
-            'authorization:' + provider + ':success:' + JSON.stringify({ token: token, provider: provider }),
-            '*'
-          );
-          // Small delay to ensure message is received before closing
-          setTimeout(function() { window.close(); }, 100);
+          status.innerHTML = 'Sending token to Decap CMS...';
+          window.opener.postMessage(message, '*');
+          status.innerHTML = 'Token sent! Closing window...';
+          setTimeout(function() { window.close(); }, 250);
         } else {
-          document.body.innerHTML = '<p>Authentication successful! You can close this window.</p>';
+          // Fallback: try to communicate via localStorage
+          try {
+            localStorage.setItem('decap-cms-auth', JSON.stringify({ token: token, provider: provider }));
+            status.innerHTML = 'Auth saved. Please close this window and refresh the admin page.';
+          } catch(e) {
+            status.innerHTML = 'Authentication successful but window.opener is null. Token: ' + token.substring(0, 10) + '...';
+          }
         }
       }
 
-      // Wait for DOM to be ready
-      if (document.readyState === 'complete') {
-        sendMessage();
-      } else {
-        window.addEventListener('load', sendMessage);
-      }
+      // Run immediately
+      sendMessage();
     })();
   </script>
-  <p>Authenticating...</p>
+  <p id="status">Authenticating...</p>
 </body>
 </html>
   `.trim();

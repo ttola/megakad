@@ -47,36 +47,24 @@ export async function onRequest(context) {
   <title>OAuth Callback</title>
 </head>
 <body>
+  <p id="status">Authenticating...</p>
   <script>
     (function() {
       const token = ${JSON.stringify(tokenData.access_token)};
       const provider = 'github';
       const message = 'authorization:' + provider + ':success:' + JSON.stringify({ token: token, provider: provider });
+      const status = document.getElementById('status');
 
-      function sendMessage() {
-        const status = document.getElementById('status');
-
-        if (window.opener) {
-          status.innerHTML = 'Sending token to Decap CMS...';
-          window.opener.postMessage(message, '*');
-          status.innerHTML = 'Token sent! Closing window...';
-          setTimeout(function() { window.close(); }, 250);
-        } else {
-          // Fallback: try to communicate via localStorage
-          try {
-            localStorage.setItem('decap-cms-auth', JSON.stringify({ token: token, provider: provider }));
-            status.innerHTML = 'Auth saved. Please close this window and refresh the admin page.';
-          } catch(e) {
-            status.innerHTML = 'Authentication successful but window.opener is null. Token: ' + token.substring(0, 10) + '...';
-          }
-        }
+      if (window.opener) {
+        status.textContent = 'Sending token to Decap CMS...';
+        window.opener.postMessage(message, '*');
+        status.textContent = 'Token sent! Closing...';
+        setTimeout(function() { window.close(); }, 250);
+      } else {
+        status.textContent = 'window.opener is null - cannot send token back. Token received: ' + token.substring(0, 10) + '...';
       }
-
-      // Run immediately
-      sendMessage();
     })();
   </script>
-  <p id="status">Authenticating...</p>
 </body>
 </html>
   `.trim();

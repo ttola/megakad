@@ -39,6 +39,7 @@ export async function onRequest(context) {
   }
 
   // Return HTML that sends the token back to Decap CMS via postMessage
+  // Uses 3-step handshake: 1) notify parent, 2) listen for response, 3) send token
   const html = `
 <!DOCTYPE html>
 <html>
@@ -52,21 +53,31 @@ export async function onRequest(context) {
     (function() {
       const token = ${JSON.stringify(tokenData.access_token)};
       const provider = 'github';
-      const message = 'authorization:' + provider + ':success:' + JSON.stringify({ token: token, provider: provider });
       const status = document.getElementById('status');
 
-      if (window.opener) {
-        status.textContent = 'window.opener EXISTS - Sending token...';
-        try {
-          window.opener.postMessage(message, '*');
-          status.textContent = 'SUCCESS: Token sent! Message: ' + message.substring(0, 60) + '...';
-        } catch(e) {
-          status.textContent = 'ERROR: postMessage failed: ' + e.message;
-        }
-        // NOT auto-closing for debugging
-      } else {
-        status.textContent = 'FAIL: window.opener is NULL. Token: ' + token.substring(0, 10) + '...';
+      if (!window.opener) {
+        status.textContent = 'Error: window.opener is null. Cannot complete authentication.';
+        return;
       }
+
+      // Step 1: Notify Decap CMS that we're authorizing
+      status.textContent = 'Notifying CMS...';
+      window.opener.postMessage('authorizing:' + provider, '*');
+
+      // Step 2: Listen for response from Decap CMS
+      window.addEventListener('message', function receiveMessage(e) {
+        status.textContent = 'Received response from CMS, sending token...';
+
+        // Step 3: Send the token back using the origin from the message
+        const content = { token: token, provider: provider };
+        window.opener.postMessage(
+          'authorization:' + provider + ':success:' + JSON.stringify(content),
+          e.origin
+        );
+
+        status.textContent = 'Authentication complete! Closing...';
+        setTimeout(function() { window.close(); }, 500);
+      }, false);
     })();
   </script>
 </body>

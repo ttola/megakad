@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const allPosts = await getCollection('posts');
+const posts = allPosts
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 5);
+---
+
+<BaseLayout title="Home | Astro Blog">
+  <section class="hero">
+    <h1>Welcome to Astro Blog</h1>
+    <p>A simple blog powered by Astro, Decap CMS, and Cloudflare Pages</p>
+  </section>
+
+  <section>
+    <h2>Recent Posts</h2>
+    {posts.map((post) => (
+      <PostCard
+        title={post.data.title}
+        slug={post.slug}
+        date={post.data.date}
+        excerpt={post.data.excerpt}
+        tags={post.data.tags}
+        coverImage={post.data.coverImage}
+      />
+    ))}
+  </section>
+
+  <div class="view-all">
+    <a href="/posts">View All Posts</a>
+  </div>
+</BaseLayout>

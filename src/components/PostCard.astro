@@ -1,0 +1,34 @@
+---
+interface Props {
+  title: string;
+  slug: string;
+  date: string;
+  excerpt?: string;
+  tags?: string[];
+  coverImage?: string;
+}
+
+const { title, slug, date, excerpt, tags = [], coverImage } = Astro.props;
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="post-card">
+  {coverImage && (
+    <img src={coverImage} alt={title} class="post-cover" />
+  )}
+  <h2><a href={`/posts/${slug}`}>{title}</a></h2>
+  <p class="post-meta">{formattedDate}</p>
+  {excerpt && <p class="post-excerpt">{excerpt}</p>}
+  {tags.length > 0 && (
+    <div class="tags">
+      {tags.map((tag) => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+  )}
+</article>

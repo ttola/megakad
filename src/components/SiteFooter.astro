@@ -6,12 +6,14 @@ interface Props {
 }
 
 const { identity } = Astro.props;
-const year = new Date().getFullYear();
+const now = new Date();
+const year = now.getFullYear();
+const quarter = Math.floor(now.getMonth() / 3) + 1;
 ---
 
 <footer class="mf-foot">
   <div class="wrap">
-    <div class="wm">{identity.company.toUpperCase()} CONSULTING LTD · {year}</div>
-    <div>Now booking 2026 Q2</div>
+    <div class="wm">{identity.company.toUpperCase()} CONSULTING LTD · <span data-current-year>{year}</span></div>
+    <div>Now booking <span data-current-year>{year}</span> Q<span data-current-quarter>{quarter}</span></div>
   </div>
 </footer>

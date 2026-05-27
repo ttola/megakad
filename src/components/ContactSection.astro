@@ -1,0 +1,22 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import type { BriefForm } from "../data/megakad";
+
+interface Props {
+  form: BriefForm;
+}
+
+const { form } = Astro.props;
+---
+
+<section class="mf-contact" id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <SectionHeading n="§04" title="Send a" emphasis="consulting brief." tag="Google Form" />
+    <div class="brief-card" id="contact-title">
+      <p>{form.note}</p>
+      <a class="mf-btn" href={form.href} target="_blank" rel="noopener noreferrer">
+        {form.label} ↗
+      </a>
+    </div>
+  </div>
+</section>

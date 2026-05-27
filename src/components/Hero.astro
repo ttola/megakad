@@ -1,11 +1,25 @@
 ---
+interface Props {
+  formHref: string;
+}
+
+const { formHref } = Astro.props;
+const now = new Date();
+const year = now.getFullYear();
+const quarter = Math.floor(now.getMonth() / 3) + 1;
 ---
 
 <section class="mf-hero" aria-labelledby="hero-title">
   <div class="wrap">
-    <div class="mf-stamp" aria-hidden="true">
-      Now<span class="big">Booking</span><span class="it">2026 — Q2</span>
-    </div>
+    <a
+      class="mf-stamp"
+      href={formHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Open the consulting briefing form"
+    >
+      Now<span class="big">Booking</span><span class="it"><span data-current-year>{year}</span> — Q<span data-current-quarter>{quarter}</span></span>
+    </a>
     <div class="eyebrow"><span class="pulse"></span>Independent consulting · Currently shipping</div>
     <h1 id="hero-title">
       We build<br />
@@ -26,7 +40,7 @@
     </div>
     <div class="cta-row">
       <a class="mf-btn" href="#portfolio">View consulting work ↓</a>
-      <a class="mf-btn alt" href="#cases">Selected receipts ↓</a>
+      <a class="mf-btn alt" href="#contact">Send a brief ↗</a>
     </div>
   </div>
 </section>

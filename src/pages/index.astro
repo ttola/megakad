@@ -7,8 +7,10 @@ import StatsGrid from "../components/StatsGrid.astro";
 import Capabilities from "../components/Capabilities.astro";
 import PortfolioList from "../components/PortfolioList.astro";
 import CaseStudies from "../components/CaseStudies.astro";
+import ContactSection from "../components/ContactSection.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import {
+  briefForm,
   capabilities,
   companies,
   identity,
@@ -22,11 +24,12 @@ import {
   <main class="mf-root">
     <Marquee items={tickerItems} />
     <SiteHeader />
-    <Hero />
+    <Hero formHref={briefForm.href} />
     <StatsGrid stats={stats} />
     <Capabilities capabilities={capabilities} />
     <PortfolioList companies={companies} />
     <CaseStudies selected={selected} />
+    <ContactSection form={briefForm} />
     <SiteFooter identity={identity} />
   </main>
 </BaseLayout>

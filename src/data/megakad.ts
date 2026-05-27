@@ -28,6 +28,12 @@ export interface CaseStudy {
   stats: Array<[string, string]>;
 }
 
+export interface BriefForm {
+  href: string;
+  label: string;
+  note: string;
+}
+
 export const identity: Identity = {
   company: "Megakad",
   tagline: "Independent consulting for teams shipping mobile, web, and platform software.",
@@ -237,3 +243,9 @@ export const tickerItems = [
   ...companies.map((company) => company.name),
   "Available for engagements",
 ];
+
+export const briefForm: BriefForm = {
+  href: "https://forms.gle/G25DVJ7hNUiEfk718",
+  label: "Open briefing form",
+  note: "Use the form to share the shape of the engagement, the team context, and what needs to ship.",
+};

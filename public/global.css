@@ -678,6 +678,44 @@ svg {
   text-transform: uppercase;
 }
 
+.mf-contact {
+  padding-bottom: 96px;
+  border-bottom: 3px solid var(--ink);
+  background: var(--paper);
+}
+
+.mf-contact .brief-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  padding: 24px;
+  border: 3px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.mf-contact .brief-card p {
+  max-width: 58ch;
+  margin: 0;
+  font-family: var(--italic);
+  font-size: 28px;
+  font-style: italic;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.mf-contact .brief-card .mf-btn {
+  align-self: end;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.mf-contact .brief-card .mf-btn:hover {
+  background: var(--hot);
+  color: var(--ink);
+  box-shadow: 6px 6px 0 var(--paper);
+}
+
 .mf-foot {
   padding: 24px 0 36px;
   border-top: 2px solid rgb(241 194 50 / 18%);
@@ -849,6 +887,16 @@ svg {
 
   .mf-case .stats .s {
     padding: 18px 20px;
+  }
+
+  .mf-contact .brief-card {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    padding: 32px;
+  }
+
+  .mf-contact .brief-card p {
+    font-size: clamp(32px, 4vw, 56px);
   }
 
   .mf-foot {

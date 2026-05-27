@@ -1,0 +1,38 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import type { Company } from "../data/megakad";
+
+interface Props {
+  companies: Company[];
+}
+
+const { companies } = Astro.props;
+---
+
+<section class="mf-port" id="portfolio" aria-labelledby="portfolio-title">
+  <div class="wrap">
+    <SectionHeading
+      n="§02"
+      title="Twelve"
+      emphasis="portfolio engagements."
+      tag="Curated · not chronological"
+    />
+    <div class="list" id="portfolio-title">
+      {companies.map((company) => (
+        <article class="mf-row" style={`--mark-color:${company.color};`}>
+          <div class="mark">{company.mark}</div>
+          <div class="meta">
+            <h3>{company.name}</h3>
+            <div class="engagement">{company.engagement}</div>
+          </div>
+          <div class="summary">{company.summary}</div>
+          <div class="tags">
+            {company.tags.slice(0, 4).map((tag) => <span>{tag}</span>)}
+          </div>
+          <div class="arr" aria-hidden="true">↗</div>
+          <div class="sector-stamp">{company.sector}</div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

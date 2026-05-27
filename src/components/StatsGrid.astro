@@ -1,0 +1,20 @@
+---
+interface Props {
+  stats: Array<[string, string]>;
+}
+
+const { stats } = Astro.props;
+---
+
+<section class="mf-stats" aria-label="Megakad stats">
+  <div class="wrap">
+    <div class="grid">
+      {stats.map(([value, label]) => (
+        <div class="col">
+          <div class="n">{value}</div>
+          <div class="lbl">{label}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

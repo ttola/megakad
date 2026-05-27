@@ -1,0 +1,16 @@
+---
+interface Props {
+  n: string;
+  title: string;
+  emphasis: string;
+  tag: string;
+}
+
+const { n, title, emphasis, tag } = Astro.props;
+---
+
+<div class="mf-section-head">
+  <div class="n">{n}</div>
+  <h2>{title} <em>{emphasis}</em></h2>
+  <div class="tag">{tag}</div>
+</div>

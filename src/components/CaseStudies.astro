@@ -1,0 +1,38 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import type { CaseStudy } from "../data/megakad";
+
+interface Props {
+  selected: CaseStudy[];
+}
+
+const { selected } = Astro.props;
+---
+
+<section class="mf-cases" id="cases" aria-labelledby="cases-title">
+  <div class="wrap">
+    <SectionHeading n="§03" title="Three engagements," emphasis="in detail." tag="Receipts" />
+    <div id="cases-title">
+      {selected.map((caseStudy) => (
+        <article class="mf-case">
+          <div class="meta">
+            <div class="n">{caseStudy.n}</div>
+            <div class="client">{caseStudy.client}</div>
+          </div>
+          <div class="body">
+            <h3>{caseStudy.title}</h3>
+            <p>{caseStudy.body}</p>
+            <div class="stats">
+              {caseStudy.stats.map(([value, label]) => (
+                <div class="s">
+                  <div class="n">{value}</div>
+                  <div class="lbl">{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

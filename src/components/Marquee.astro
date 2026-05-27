@@ -1,0 +1,19 @@
+---
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+const ticker = [...items, ...items];
+---
+
+<div class="mf-marquee" aria-label="Megakad portfolio ticker">
+  <div class="track">
+    {ticker.map((item) => (
+      <>
+        <span>{item}</span>
+        <span class="dot" aria-hidden="true">●</span>
+      </>
+    ))}
+  </div>
+</div>

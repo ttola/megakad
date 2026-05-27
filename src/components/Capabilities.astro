@@ -1,0 +1,28 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import type { Capability } from "../data/megakad";
+
+interface Props {
+  capabilities: Capability[];
+}
+
+const { capabilities } = Astro.props;
+---
+
+<section class="mf-cap" id="capabilities" aria-labelledby="capabilities-title">
+  <div class="wrap">
+    <SectionHeading n="§01" title="What you" emphasis="hire us for." tag="04 capabilities" />
+    <div class="grid" id="capabilities-title">
+      {capabilities.map((capability) => (
+        <article class="item">
+          <div class="n">{capability.n}</div>
+          <h3>{capability.title}</h3>
+          <p>{capability.blurb}</p>
+          <div class="tools">
+            {capability.tools.map((tool) => <span>{tool}</span>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,122 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { identity } from "../data/megakad";
+
+interface Props {
+  title: string;
+  description: string;
+  app: string;
+  updated?: string;
+}
+
+const { title, description, app, updated } = Astro.props;
+const links = [
+  ["Support", "/apps/tolavr/"],
+  ["Privacy policy", "/apps/tolavr/privacy/"],
+  ["Terms & conditions", "/apps/tolavr/terms/"],
+];
+const current = Astro.url.pathname.replace(/\/?$/, "/");
+---
+
+<BaseLayout title={`${title} — ${app} — Megakad`} description={description}>
+  <main class="mf-root">
+    <div class="wrap">
+      <header class="mf-top">
+        <a class="wm" href="/" aria-label="Megakad home">MEGAKAD<em>.</em></a>
+      </header>
+    </div>
+    <article class="app-doc">
+      <div class="wrap">
+        <p class="kicker">{app}</p>
+        <h1>{title}</h1>
+        {updated && <p class="updated">Last updated {updated}</p>}
+        <nav class="app-nav" aria-label={`${app} pages`}>
+          {links.map(([label, href]) => (
+            <a href={href} aria-current={current === href ? "page" : undefined}>{label}</a>
+          ))}
+        </nav>
+        <div class="app-body">
+          <slot />
+        </div>
+      </div>
+    </article>
+    <SiteFooter identity={identity} />
+  </main>
+</BaseLayout>
+
+<style>
+  .app-doc {
+    padding: 48px 0 80px;
+  }
+  .app-doc .wrap {
+    max-width: 820px;
+  }
+  .kicker {
+    margin: 0 0 8px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(40px, 7vw, 72px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    font-variation-settings: "wght" 800, "wdth" 80;
+  }
+  .updated {
+    margin: 12px 0 0;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .app-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 28px 0 36px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid var(--ink);
+  }
+  .app-nav a {
+    padding: 8px 14px;
+    border: 2px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .app-nav a[aria-current="page"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .app-body {
+    background: var(--cream);
+    border: 3px solid var(--ink);
+    padding: clamp(20px, 4vw, 40px);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .app-body :global(h2) {
+    margin: 32px 0 8px;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    font-variation-settings: "wght" 700, "wdth" 90;
+  }
+  .app-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .app-body :global(p),
+  .app-body :global(li) {
+    margin: 0 0 12px;
+  }
+  .app-body :global(ul),
+  .app-body :global(ol) {
+    margin: 0 0 12px;
+    padding-left: 22px;
+  }
+  .app-body :global(a) {
+    color: var(--hot);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

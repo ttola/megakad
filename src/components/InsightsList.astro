@@ -1,0 +1,40 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import type { PostItem } from "../data/posts";
+
+interface Props {
+  posts: PostItem[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <section class="mf-port" id="insights" aria-labelledby="insights-title">
+    <div class="wrap">
+      <SectionHeading
+        n="§04"
+        title="Field notes"
+        emphasis="from delivery."
+        tag="Megakad insights"
+      />
+      <div class="list" id="insights-title">
+        {posts.map((post) => (
+          <a class="mf-row" style={`--mark-color:${post.color};`} href={post.href}>
+            <div class="mark">{post.mark}</div>
+            <div class="meta">
+              <h3>{post.title}</h3>
+              <div class="engagement">{post.kind} · {post.date}</div>
+            </div>
+            <div class="summary">{post.summary}</div>
+            <div class="tags">
+              {post.tags.slice(0, 4).map((tag) => <span>{tag}</span>)}
+            </div>
+            <div class="arr" aria-hidden="true">↗</div>
+            <div class="sector-stamp">{post.kind}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Marquee from "../../components/Marquee.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import { briefForm, identity, tickerItems } from "../../data/megakad";
+import type { PostKind } from "../../data/posts";
+
+interface MarkdownPost {
+  frontmatter: {
+    title: string;
+    slug: string;
+    kind: PostKind;
+    summary: string;
+    date: string;
+    status: "published";
+    tags: string[];
+  };
+  Content: any;
+}
+
+export function getStaticPaths() {
+  const posts = Object.values(
+    import.meta.glob("../../content/posts/*.md", { eager: true }),
+  ) as MarkdownPost[];
+
+  return posts
+    .filter((post) => post.frontmatter.status === "published")
+    .map((post) => ({
+      params: { slug: post.frontmatter.slug },
+      props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+const { Content } = post;
+const title = `${post.frontmatter.title} — Megakad`;
+const description = post.frontmatter.summary;
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="mf-root">
+    <Marquee items={tickerItems} />
+    <SiteHeader hasInsights={true} />
+    <article class="mf-post-detail">
+      <div class="wrap">
+        <a class="mf-back" href="/#insights">← All insights</a>
+        <header class="mf-post-hero">
+          <div class="eyebrow">
+            <span class="pulse"></span>{post.frontmatter.kind} · {post.frontmatter.date}
+          </div>
+          <h1>{post.frontmatter.title}</h1>
+          <p>{post.frontmatter.summary}</p>
+          <div class="tags">
+            {post.frontmatter.tags.map((tag: string) => <span>{tag}</span>)}
+          </div>
+        </header>
+        <div class="mf-post-body">
+          <Content />
+        </div>
+        <aside class="mf-post-consulting">
+          <p>
+            Need help shipping? <a href={briefForm.href}>Open the Megakad briefing form</a>.
+          </p>
+        </aside>
+      </div>
+    </article>
+    <SiteFooter identity={identity} />
+  </main>
+</BaseLayout>

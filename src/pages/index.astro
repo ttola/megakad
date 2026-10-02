@@ -7,6 +7,7 @@ import StatsGrid from "../components/StatsGrid.astro";
 import Capabilities from "../components/Capabilities.astro";
 import PortfolioList from "../components/PortfolioList.astro";
 import CaseStudies from "../components/CaseStudies.astro";
+import InsightsList from "../components/InsightsList.astro";
 import ContactSection from "../components/ContactSection.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import {
@@ -18,18 +19,55 @@ import {
   stats,
   tickerItems,
 } from "../data/megakad";
+import { postKindMeta, type PostItem } from "../data/posts";
+
+interface MarkdownPost {
+  frontmatter: {
+    title: string;
+    slug: string;
+    kind: PostItem["kind"];
+    summary: string;
+    date: string;
+    status: string;
+    tags?: string[];
+  };
+}
+
+const postModules = Object.values(
+  import.meta.glob("../content/posts/*.md", { eager: true }),
+) as MarkdownPost[];
+
+const posts = postModules
+  .filter((post) => post.frontmatter.status === "published")
+  .map((post): PostItem => {
+    const kind = post.frontmatter.kind;
+
+    return {
+      title: post.frontmatter.title,
+      slug: post.frontmatter.slug,
+      kind,
+      summary: post.frontmatter.summary,
+      date: post.frontmatter.date,
+      status: "published",
+      tags: post.frontmatter.tags ?? [],
+      href: `/posts/${post.frontmatter.slug}/`,
+      ...postKindMeta[kind],
+    };
+  })
+  .sort((a, b) => b.date.localeCompare(a.date));
 ---
 
 <BaseLayout>
   <main class="mf-root">
     <Marquee items={tickerItems} />
-    <SiteHeader />
+    <SiteHeader hasInsights={posts.length > 0} />
     <Hero formHref={briefForm.href} />
     <StatsGrid stats={stats} />
     <Capabilities capabilities={capabilities} />
     <PortfolioList companies={companies} />
     <CaseStudies selected={selected} />
-    <ContactSection form={briefForm} />
+    <InsightsList posts={posts} />
+    <ContactSection form={briefForm} sectionNumber={posts.length > 0 ? "§05" : "§04"} />
     <SiteFooter identity={identity} />
   </main>
 </BaseLayout>

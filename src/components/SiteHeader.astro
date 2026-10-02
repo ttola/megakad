@@ -1,11 +1,20 @@
+---
+interface Props {
+  hasInsights?: boolean;
+}
+
+const { hasInsights = false } = Astro.props;
+---
+
 <div class="wrap">
   <header class="mf-top">
     <a class="wm" href="/" aria-label="Megakad home">MEGAKAD<em>.</em></a>
     <nav class="nav" aria-label="Primary navigation">
-      <a href="#capabilities">[01] Capabilities</a>
-      <a href="#portfolio">[02] Portfolio</a>
-      <a href="#cases">[03] Selected work</a>
-      <a href="#contact">[04] Brief</a>
+      <a href="/#capabilities">[01] Capabilities</a>
+      <a href="/#portfolio">[02] Portfolio</a>
+      <a href="/#cases">[03] Selected work</a>
+      {hasInsights && <a href="/#insights">[04] Insights</a>}
+      <a href="/#contact">[{hasInsights ? "05" : "04"}] Brief</a>
     </nav>
   </header>
 </div>

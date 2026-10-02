@@ -241,6 +241,7 @@ export const selected: CaseStudy[] = [
 
 export const tickerItems = [
   ...companies.map((company) => company.name),
+  "Field notes",
   "Available for engagements",
 ];
 
